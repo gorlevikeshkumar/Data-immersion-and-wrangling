@@ -1,0 +1,434 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "cb52eeb5-1bde-44ac-ba54-905e1a61ed4b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "98af3962-115b-4b5d-882e-799e6f59a287",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = pd.read_csv(r\"C:\\Users\\DELL\\Downloads\\sales_data.csv\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "4e66360f-f70a-4f60-add1-4b4349e7a9dc",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "FIRST 10 RECORDS\n",
+      "  Customer_Name   Age       City  Order_Date  Quantity  Price\n",
+      "0          Ravi  25.0  Hyderabad  2025-01-10         2    500\n",
+      "1         Priya  30.0    Chennai  2025-02-11         1    700\n",
+      "2         Arjun  22.0  Bangalore  2025-01-15         3    450\n",
+      "3         Sneha  28.0     Mumbai  2025-03-01         5    300\n",
+      "4         Kiran  35.0      Delhi  2025-02-18         2    800\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"FIRST 10 RECORDS\")\n",
+    "print(df.head())\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "c3777310-1603-4942-9495-6bbd7ac9a0d1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "DATA INFORMATION\n",
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 23 entries, 0 to 22\n",
+      "Data columns (total 6 columns):\n",
+      " #   Column         Non-Null Count  Dtype  \n",
+      "---  ------         --------------  -----  \n",
+      " 0   Customer_Name  23 non-null     object \n",
+      " 1   Age            21 non-null     float64\n",
+      " 2   City           22 non-null     object \n",
+      " 3   Order_Date     23 non-null     object \n",
+      " 4   Quantity       23 non-null     int64  \n",
+      " 5   Price          23 non-null     int64  \n",
+      "dtypes: float64(1), int64(2), object(3)\n",
+      "memory usage: 1.2+ KB\n",
+      "None\n",
+      "\n",
+      "COLUMN NAMES\n",
+      "Index(['Customer_Name', 'Age', 'City', 'Order_Date', 'Quantity', 'Price'], dtype='object')\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"\\nDATA INFORMATION\")\n",
+    "print(df.info())\n",
+    "\n",
+    "print(\"\\nCOLUMN NAMES\")\n",
+    "print(df.columns)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "7ff41c8a-d7ac-459e-816a-5cce2bd74387",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "MISSING VALUES\n",
+      "Customer_Name    0\n",
+      "Age              2\n",
+      "City             1\n",
+      "Order_Date       0\n",
+      "Quantity         0\n",
+      "Price            0\n",
+      "dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"\\nMISSING VALUES\")\n",
+    "print(df.isnull().sum())\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "30d54186-cbc6-42d7-91ca-e7928e076948",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[\"Age\"] = df[\"Age\"].fillna(df[\"Age\"].mean())\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "6458472b-4604-4d4e-8474-2e87018bf98b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[\"City\"] = df[\"City\"].fillna(\"Unknown\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "65097549-ca4b-4719-a040-a9ab0826b75a",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "DUPLICATE ROWS : 4\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"\\nDUPLICATE ROWS :\", df.duplicated().sum())\n",
+    "\n",
+    "df = df.drop_duplicates()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "46ddcc51-84d4-4693-978d-66165cbf432f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[\"Order_Date\"] = pd.to_datetime(df[\"Order_Date\"])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "6e28f4ac-9f2d-47eb-bf7b-12315eba0968",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[\"Customer_Name\"] = df[\"Customer_Name\"].str.title()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "4647f936-ddd1-4b26-b525-ce017ef30beb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[\"Total_Price\"] = df[\"Quantity\"] * df[\"Price\"]\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "10dfbe36-c69f-41ae-b3d0-331c311d4aeb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[\"Age_Group\"] = np.where(df[\"Age\"] < 30, \"Young\", \"Adult\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "4553e136-93dc-4830-a92c-d43dfff7d920",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "OUTLIERS\n",
+      "   Customer_Name   Age       City Order_Date  Quantity  Price  Total_Price  \\\n",
+      "11        Suresh  31.0  Bangalore 2025-02-20         1  15000        15000   \n",
+      "\n",
+      "   Age_Group  \n",
+      "11     Adult  \n"
+     ]
+    }
+   ],
+   "source": [
+    "Q1 = df[\"Price\"].quantile(0.25)\n",
+    "Q3 = df[\"Price\"].quantile(0.75)\n",
+    "\n",
+    "IQR = Q3 - Q1\n",
+    "\n",
+    "lower = Q1 - 1.5 * IQR\n",
+    "upper = Q3 + 1.5 * IQR\n",
+    "\n",
+    "outliers = df[(df[\"Price\"] < lower) | (df[\"Price\"] > upper)]\n",
+    "\n",
+    "print(\"\\nOUTLIERS\")\n",
+    "print(outliers)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "94db477e-494b-40a7-a9a1-a668774187de",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "DATA CLEANING COMPLETED\n",
+      "Cleaned file saved as cleaned_sales_data.csv\n"
+     ]
+    }
+   ],
+   "source": [
+    "df.to_csv(\"cleaned_sales_data.csv\", index=False)\n",
+    "\n",
+    "print(\"\\nDATA CLEANING COMPLETED\")\n",
+    "print(\"Cleaned file saved as cleaned_sales_data.csv\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "195a893d-59c7-40e2-972a-bc6e107704dc",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "FIRST 10 RECORDS\n",
+      "  Customer_Name   Age       City  Order_Date  Quantity  Price\n",
+      "0          Ravi  25.0  Hyderabad  2025-01-10         2    500\n",
+      "1         Priya  30.0    Chennai  2025-02-11         1    700\n",
+      "2         Arjun  22.0  Bangalore  2025-01-15         3    450\n",
+      "3         Sneha  28.0     Mumbai  2025-03-01         5    300\n",
+      "4         Kiran  35.0      Delhi  2025-02-18         2    800\n",
+      "\n",
+      "DATA INFORMATION\n",
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 23 entries, 0 to 22\n",
+      "Data columns (total 6 columns):\n",
+      " #   Column         Non-Null Count  Dtype  \n",
+      "---  ------         --------------  -----  \n",
+      " 0   Customer_Name  23 non-null     object \n",
+      " 1   Age            21 non-null     float64\n",
+      " 2   City           22 non-null     object \n",
+      " 3   Order_Date     23 non-null     object \n",
+      " 4   Quantity       23 non-null     int64  \n",
+      " 5   Price          23 non-null     int64  \n",
+      "dtypes: float64(1), int64(2), object(3)\n",
+      "memory usage: 1.2+ KB\n",
+      "None\n",
+      "\n",
+      "COLUMN NAMES\n",
+      "Index(['Customer_Name', 'Age', 'City', 'Order_Date', 'Quantity', 'Price'], dtype='object')\n",
+      "\n",
+      "MISSING VALUES\n",
+      "Customer_Name    0\n",
+      "Age              2\n",
+      "City             1\n",
+      "Order_Date       0\n",
+      "Quantity         0\n",
+      "Price            0\n",
+      "dtype: int64\n",
+      "\n",
+      "DUPLICATE ROWS : 4\n",
+      "\n",
+      "OUTLIERS\n",
+      "   Customer_Name   Age       City Order_Date  Quantity  Price  Total_Price  \\\n",
+      "11        Suresh  31.0  Bangalore 2025-02-20         1  15000        15000   \n",
+      "\n",
+      "   Age_Group  \n",
+      "11     Adult  \n",
+      "\n",
+      "DATA CLEANING COMPLETED\n",
+      "Cleaned file saved as cleaned_sales_data.csv\n"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
+    "\n",
+    "# Import libraries\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "\n",
+    "# Read CSV file\n",
+    "df = pd.read_csv(r\"C:\\Users\\DELL\\Downloads\\sales_data.csv\")\n",
+    "\n",
+    "# Display first 10 rows\n",
+    "print(\"FIRST 10 RECORDS\")\n",
+    "print(df.head())\n",
+    "\n",
+    "\n",
+    "print(\"\\nDATA INFORMATION\")\n",
+    "print(df.info())\n",
+    "\n",
+    "print(\"\\nCOLUMN NAMES\")\n",
+    "print(df.columns)\n",
+    "\n",
+    "# STEP 3 : CHECK MISSING VALUES\n",
+    "\n",
+    "print(\"\\nMISSING VALUES\")\n",
+    "print(df.isnull().sum())\n",
+    "\n",
+    "# Fill missing numerical values with mean\n",
+    "df[\"Age\"] = df[\"Age\"].fillna(df[\"Age\"].mean())\n",
+    "\n",
+    "# Fill missing categorical values\n",
+    "df[\"City\"] = df[\"City\"].fillna(\"Unknown\")\n",
+    "\n",
+    "# STEP 4 : REMOVE DUPLICATES\n",
+    "\n",
+    "print(\"\\nDUPLICATE ROWS :\", df.duplicated().sum())\n",
+    "\n",
+    "df = df.drop_duplicates()\n",
+    "\n",
+    "# STEP 5 : STANDARDIZE DATA\n",
+    "\n",
+    "# Convert date column\n",
+    "df[\"Order_Date\"] = pd.to_datetime(df[\"Order_Date\"])\n",
+    "\n",
+    "# Convert text into proper format\n",
+    "df[\"Customer_Name\"] = df[\"Customer_Name\"].str.title()\n",
+    "\n",
+    "# STEP 6 : FEATURE ENGINEERING\n",
+    "\n",
+    "# Create Total Price column\n",
+    "df[\"Total_Price\"] = df[\"Quantity\"] * df[\"Price\"]\n",
+    "\n",
+    "# Create Age Category\n",
+    "df[\"Age_Group\"] = np.where(df[\"Age\"] < 30, \"Young\", \"Adult\")\n",
+    "\n",
+    "# STEP 7 : OUTLIER DETECTION\n",
+    "\n",
+    "Q1 = df[\"Price\"].quantile(0.25)\n",
+    "Q3 = df[\"Price\"].quantile(0.75)\n",
+    "\n",
+    "IQR = Q3 - Q1\n",
+    "\n",
+    "lower = Q1 - 1.5 * IQR\n",
+    "upper = Q3 + 1.5 * IQR\n",
+    "\n",
+    "outliers = df[(df[\"Price\"] < lower) | (df[\"Price\"] > upper)]\n",
+    "\n",
+    "print(\"\\nOUTLIERS\")\n",
+    "print(outliers)\n",
+    "\n",
+    "# STEP 8 : SAVE CLEANED DATA\n",
+    "\n",
+    "df.to_csv(\"cleaned_sales_data.csv\", index=False)\n",
+    "\n",
+    "print(\"\\nDATA CLEANING COMPLETED\")\n",
+    "print(\"Cleaned file saved as cleaned_sales_data.csv\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d8aeaad6-ba81-46ad-87eb-210f57693875",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7f2fbdc2-cc24-4ba3-83ea-511dd6586e12",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:base] *",
+   "language": "python",
+   "name": "conda-base-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
